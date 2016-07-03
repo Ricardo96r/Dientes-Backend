@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
         $faker = Faker\Factory::create();
 
         $registros = 500;
+		
+		$formatoFecha ='m/d/y H:i:s';
 
         /*
          *  Paciente
@@ -38,7 +40,7 @@ class DatabaseSeeder extends Seeder
         /*
          * Odontologo
          */
-        for ($i = 0; $i < $registros; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             DB::table('odontologo')->insert([
                 'nombre' => $faker->firstName,
                 'segundo_nombre' => $faker->randomElement([null, $faker->firstName]),
@@ -52,10 +54,10 @@ class DatabaseSeeder extends Seeder
         /*
          * Cita
          */
-        for ($i = 0; $i < $registros; $i++) {
+        for ($i = 0; $i < 4*$registros; $i++) {
             DB::table('cita')->insert([
                 'motivo' => $faker->paragraph(),
-                'fecha' => $faker->dateTimeBetween('-200 days', '30 days')->format('d-m-Y H:i:s'),
+                'fecha' => $faker->dateTimeBetween('-200 days', '30 days')->format($formatoFecha),
                 'id_paciente' => $faker->numberBetween(1, DB::table('paciente')->count()),
                 'id_odontologo' => $faker->numberBetween(1, DB::table('odontologo')->count()),
             ]);
@@ -64,10 +66,10 @@ class DatabaseSeeder extends Seeder
         /*
          * Consulta
          */
-        for ($i = 0; $i < $registros; $i++) {
+        for ($i = 0; $i < 3*$registros; $i++) {
             DB::table('consulta')->insert([
                 'observaciones' => $faker->paragraph(),
-                'fecha' => $faker->dateTimeBetween('-200 days', '30 days')->format('d-m-Y H:i:s'),
+                'fecha' => $faker->dateTimeBetween('-200 days', '30 days')->format($formatoFecha),
                 'id_paciente' => $faker->numberBetween(1, DB::table('paciente')->count()),
                 'id_odontologo' => $faker->numberBetween(1, DB::table('odontologo')->count()),
             ]);
@@ -76,10 +78,10 @@ class DatabaseSeeder extends Seeder
         /*
          * Factura
          */
-        for ($i = 0; $i < $registros; $i++) {
+        for ($i = 0; $i < 2.8*$registros; $i++) {
             DB::table('factura')->insert([
                 'id_consulta' => $i + 1,
-                'fecha' => $faker->dateTimeBetween('-200 days', '30 days')->format('d-m-Y H:i:s'),
+                'fecha' => $faker->dateTimeBetween('-200 days', '30 days')->format($formatoFecha),
                 'costo' => $faker->randomFloat(2, 1000, 100000),
                 'forma_de_pago' => $faker->randomElement(['Crédito', 'Débito', 'Efectivo', 'Cheque', 'Otro']),
             ]);
@@ -112,8 +114,8 @@ class DatabaseSeeder extends Seeder
         for ($i = 0; $i < $registros; $i++) {
             DB::table('historial')->insert([
                 'id_paciente' => $i + 1,
-                'fecha_creacion' => $faker->dateTimeBetween('-200 days', '30 days')->format('d-m-Y H:i:s'),
-                'ultima_visita_al_odontologo' => $faker->dateTimeBetween('-400 days', '-200 days')->format('d-m-Y H:i:s'),
+                'fecha_creacion' => $faker->dateTimeBetween('-200 days', '30 days')->format($formatoFecha),
+                'ultima_visita_al_odontologo' => $faker->dateTimeBetween('-400 days', '-200 days')->format($formatoFecha),
                 'aprieta_los_dientes' => $faker->boolean(),
                 'dolor_de_dientes' => $faker->boolean(),
                 'observacion_dolor' => $faker->randomElement([$faker->paragraph(), null]),
@@ -123,8 +125,8 @@ class DatabaseSeeder extends Seeder
                 'observacion_ruidos' => $faker->randomElement([$faker->paragraph(), null]),
                 'fuma' => $faker->boolean(),
                 'cigaros_diarios' => $faker->randomElement([$faker->numberBetween(1, 30), null]),
-                'muerde_objetos_extraños' => $faker->boolean(),
-                'muerde_las_uñas' => $faker->boolean(),
+                'muerde_objetos_extranos' => $faker->boolean(),
+                'muerde_las_unas' => $faker->boolean(),
                 'experiencia_dental_negativa' => $faker->boolean(),
                 'instruido_en_cepillado' => $faker->boolean(),
                 'embarazo' => $faker->randomElement([null, true, false]),

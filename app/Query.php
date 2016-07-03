@@ -24,7 +24,7 @@ class Query extends Model
      *  Query 2
      *  Objetivo: Mostrar odontólogo con más pacientes de un mes, con sus datos y la cantidad de clientes atendidos.
      */
-    public static function odontologoTopMes($mes)
+    public static function masPacientesMes($mes)
     {
         return DB::select("
             SELECT b.id_odontologo, CONCAT(b.nombre,' ', b.segundo_nombre,' ', b.apellido,' ', b.segundo_apellido) AS nombre, b.cedula, b.especialidad, q.clientes 
@@ -38,7 +38,7 @@ class Query extends Model
                         SELECT id_odontologo AS id, DATEPART(MONTH,fecha) AS mes, COUNT(DISTINCT id_paciente) AS clientes
                         FROM consulta
                         GROUP BY id_odontologo, DATEPART(YEAR,fecha), DATEPART(month,fecha)
-                        HAVING DATEPART(YEAR,GETDATE())= DATEPART(YEAR,fecha) AND DATEPART(MONTH,fecha)=$mes
+                        HAVING DATEPART(YEAR,GETDATE())= DATEPART(YEAR,fecha) AND DATEPART(MONTH,fecha)='$mes'
                     ) AS query1
                 )
             ) AS q INNER JOIN odontologo b ON q.id_odontologo=b.id_odontologo;

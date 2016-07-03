@@ -99,8 +99,8 @@ class CreateDientesSchema extends Migration
                 $tabla->text('observacion_ruidos')->nullable();
                 $tabla->boolean('fuma');
                 $tabla->integer('cigaros_diarios')->nullable();
-                $tabla->boolean('muerde_objetos_extraños');
-                $tabla->boolean('muerde_las_uñas');
+                $tabla->boolean('muerde_objetos_extranos');
+                $tabla->boolean('muerde_las_unas');
                 $tabla->boolean('experiencia_dental_negativa');
                 $tabla->boolean('instruido_en_cepillado');
                 $tabla->boolean('embarazo')->nullable();
