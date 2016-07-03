@@ -167,12 +167,16 @@ class HistorialController extends Controller
 	}
 	
 	public function odontologos() {
-		$resultado= DB::select("SELECT id_odontologo, CONCAT(nombre, ' ', apellido) AS nombre FROM odontologo;");
+		$resultado= DB::select("SELECT id_odontologo, CONCAT(nombre, ' ', apellido) AS nombre 
+		FROM odontologo
+		ORDER BY nombre;");
         return $resultado;
 	}
 	
 	public function pacientes() {
-		$resultado= DB::select("SELECT id_paciente, CONCAT(nombre, ' ', apellido) AS nombre FROM paciente;");
+		$resultado= DB::select("SELECT id_paciente, CONCAT(nombre, ' ', apellido) AS nombre 
+		FROM paciente
+		ORDER BY nombre;");
         return $resultado;
 	}
 	
