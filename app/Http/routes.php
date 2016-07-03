@@ -44,6 +44,8 @@ Route::group(['middleware' => ['api'], 'prefix' => 'api/v1', 'namespace' => 'His
 	Route::post('registrarCita', 'HistorialController@registrarCita');
 	Route::post('registrarConsulta', 'HistorialController@registrarConsulta');
 	Route::post('facturar', 'HistorialController@facturar');
+	Route::post('registrarPaciente', 'HistorialController@registrarPaciente');
+	Route::post('registrarOdontologo', 'HistorialController@registrarOdontologo');
 });
 
 

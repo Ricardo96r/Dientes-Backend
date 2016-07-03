@@ -206,6 +206,7 @@ class HistorialController extends Controller
         'fecha' => 'required|date',
 		'id_paciente' => 'required|exists:paciente,id_paciente',
         'id_odontologo' => 'required|exists:odontologo,id_odontologo',
+		'id_tratamiento' => 'required|exists:tratamiento,id_tratamiento'
 		]);
 
 		if ($v->fails())
@@ -213,14 +214,23 @@ class HistorialController extends Controller
 			return $v->errors();
 		}
 		else{
-			DB::insert("INSERT INTO consulta (observaciones, fecha, id_paciente, id_odontologo)
+			$id=DB::insert("INSERT INTO consulta (observaciones, fecha, id_paciente, id_odontologo)
+			OUTPUT INSERTED.id_consulta
 			VALUES ('$request->observaciones', '$request->fecha', '$request->id_paciente', '$request->id_odontologo');");
+			
+			DB::insert("INSERT INTO consulta_has_tratamiento VALUES('$id', '$request->id_tratamiento');");
 			return "Éxito";
 		}
 	}
 	
 	public function consultasPaciente($id_paciente){
-		$resultado=DB::select("SELECT * FROM consulta WHERE id_paciente='$id_paciente'");
+		$resultado=DB::select("SELECT a.*, c.* 
+		FROM consulta a 
+		LEFT JOIN consulta_has_tratamiento b 
+		ON a.id_consulta=b.id_consulta 
+		LEFT JOIN tratamiento c 
+		ON c.id_tratamiento=b.id_tratamiento
+		WHERE a.id_paciente='$id_paciente'");
 		return $resultado;
 	}
 	
@@ -251,5 +261,56 @@ class HistorialController extends Controller
 			return "Éxito";
 		}
 	}
+	
+	public function registrarPaciente(Request $request) {
+		 $v = Validator::make($request->all(), [
+        'nombre' => 'required|String',
+		'segundo_nombre' => 'String',
+		'apellido' => 'required|String',
+		'segundo_apellido' => 'String',
+		'genero' => 'required|String',
+		'fecha_nacimiento' => 'required|date',
+        'cedula' => 'required|Integer',
+		'ocupacion' => 'required|String',
+		'telefono' => 'required|min:11|numeric',
+		'telefono_emergencias' => 'required|min:11|numeric'
+		]);
+
+		if ($v->fails())
+		{
+			return $v->errors();
+		}
+		else{
+			DB::insert("INSERT INTO paciente (nombre, segundo_nombre, apellido, segundo_apellido, genero, fecha_nacimiento,
+			cedula, ocupacion, telefono, telefono_emergencias)
+			VALUES('$request->nombre', '$request->segundo_nombre', '$request->apellido', '$request->segundo_apellido', '$request->genero', '$request->fecha_nacimiento', '$request->cedula',
+			'$request->ocupacion', '$request->telefono', '$request->telefono_emergencias');");
+			return "Éxito";
+		}
+	}
+	
+	public function registrarOdontologo(Request $request) {
+		 $v = Validator::make($request->all(), [
+        'nombre' => 'required|String',
+		'segundo_nombre' => 'String',
+		'apellido' => 'required|String',
+		'segundo_apellido' => 'String',
+        'cedula' => 'required|Integer',
+		'especialidad' => 'required|String',
+		]);
+
+		if ($v->fails())
+		{
+			return $v->errors();
+		}
+		else{
+			DB::insert("INSERT INTO odontologo (nombre, segundo_nombre, apellido, segundo_apellido,
+			cedula, especialidad)
+			VALUES('$request->nombre', '$request->segundo_nombre', '$request->apellido', '$request->segundo_apellido', '$request->cedula',
+			'$request->especialidad');");
+			return "Éxito";
+		}
+	}
+	
 
 }
