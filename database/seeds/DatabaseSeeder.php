@@ -80,7 +80,7 @@ class DatabaseSeeder extends Seeder
          */
         for ($i = 0; $i < 2.8*$registros; $i++) {
             DB::table('factura')->insert([
-                'id_consulta' => $i + 1,
+                'id' => $i + 1,
                 'fecha' => $faker->dateTimeBetween('-200 days', '30 days')->format($formatoFecha),
                 'costo' => $faker->randomFloat(2, 1000, 100000),
                 'forma_de_pago' => $faker->randomElement(['Crédito', 'Débito', 'Efectivo', 'Cheque', 'Otro']),
@@ -113,7 +113,7 @@ class DatabaseSeeder extends Seeder
          */
         for ($i = 0; $i < $registros; $i++) {
             DB::table('historial')->insert([
-                'id_paciente' => $i + 1,
+                'id' => $i + 1,
                 'fecha_creacion' => $faker->dateTimeBetween('-200 days', '30 days')->format($formatoFecha),
                 'ultima_visita_al_odontologo' => $faker->dateTimeBetween('-400 days', '-200 days')->format($formatoFecha),
                 'aprieta_los_dientes' => $faker->boolean(),

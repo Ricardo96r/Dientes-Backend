@@ -16,7 +16,7 @@ class CreateDientesSchema extends Migration
     {
         DB::transaction(function() {
             Schema::create('paciente', function (Blueprint $tabla) {
-                $tabla->increments('id_paciente');
+                $tabla->increments('id');
                 $tabla->string('nombre');
                 $tabla->string('segundo_nombre')->nullable();
                 $tabla->string('apellido');
@@ -30,7 +30,7 @@ class CreateDientesSchema extends Migration
             });
 
             Schema::create('odontologo', function (Blueprint $tabla) {
-                $tabla->increments('id_odontologo');
+                $tabla->increments('id');
                 $tabla->string('nombre');
                 $tabla->string('segundo_nombre')->nullable();
                 $tabla->string('apellido');
@@ -40,38 +40,38 @@ class CreateDientesSchema extends Migration
             });
 
             Schema::create('cita', function (Blueprint $tabla) {
-                $tabla->increments('id_cita');
+                $tabla->increments('id');
                 $tabla->text('motivo');
                 $tabla->dateTime('fecha');
                 $tabla->integer('id_paciente')->unsigned();
                 $tabla->integer('id_odontologo')->unsigned();
 
-                $tabla->foreign('id_odontologo')->references('id_odontologo')->on('odontologo')->onDelete('cascade');
-                $tabla->foreign('id_paciente')->references('id_paciente')->on('paciente')->onDelete('cascade');
+                $tabla->foreign('id_odontologo')->references('id')->on('odontologo')->onDelete('cascade');
+                $tabla->foreign('id_paciente')->references('id')->on('paciente')->onDelete('cascade');
             });
 
             Schema::create('consulta', function (Blueprint $tabla) {
-                $tabla->increments('id_consulta');
+                $tabla->increments('id');
                 $tabla->text('observaciones');
                 $tabla->date('fecha');
                 $tabla->integer('id_paciente')->unsigned();
                 $tabla->integer('id_odontologo')->unsigned();
 
-                $tabla->foreign('id_odontologo')->references('id_odontologo')->on('odontologo')->onDelete('cascade');
-                $tabla->foreign('id_paciente')->references('id_paciente')->on('paciente')->onDelete('cascade');
+                $tabla->foreign('id_odontologo')->references('id')->on('odontologo')->onDelete('cascade');
+                $tabla->foreign('id_paciente')->references('id')->on('paciente')->onDelete('cascade');
             });
 
             Schema::create('factura', function (Blueprint $tabla) {
-                $tabla->integer('id_consulta')->primary()->unsigned();
+                $tabla->integer('id')->primary()->unsigned();
                 $tabla->dateTime('fecha');
                 $tabla->float('costo');
                 $tabla->string('forma_de_pago');
 
-                $tabla->foreign('id_consulta')->references('id_consulta')->on('consulta')->onDelete('cascade');
+                $tabla->foreign('id')->references('id')->on('consulta')->onDelete('cascade');
             });
 
             Schema::create('tratamiento', function (Blueprint $tabla) {
-                $tabla->increments('id_tratamiento');
+                $tabla->increments('id');
                 $tabla->string('nombre');
                 $tabla->text('detalles');
                 $tabla->float('costo');
@@ -81,13 +81,13 @@ class CreateDientesSchema extends Migration
                 $tabla->integer('id_consulta')->unsigned();
                 $tabla->integer('id_tratamiento')->unsigned();
 
-                $tabla->foreign('id_consulta')->references('id_consulta')->on('consulta')->onDelete('cascade');
-                $tabla->foreign('id_tratamiento')->references('id_tratamiento')->on('tratamiento')->onDelete('cascade');
+                $tabla->foreign('id_consulta')->references('id')->on('consulta')->onDelete('cascade');
+                $tabla->foreign('id_tratamiento')->references('id')->on('tratamiento')->onDelete('cascade');
                 $tabla->primary(['id_consulta', 'id_tratamiento']);
             });
 
             Schema::create('historial', function (Blueprint $tabla) {
-                $tabla->integer('id_paciente')->primary()->unsigned();
+                $tabla->integer('id')->primary()->unsigned();
                 $tabla->dateTime('fecha_creacion')->default(DB::raw('GETDATE()'));
                 $tabla->date('ultima_visita_al_odontologo');
                 $tabla->boolean('aprieta_los_dientes');
@@ -107,21 +107,22 @@ class CreateDientesSchema extends Migration
                 $tabla->boolean('ciclo_menstrual_regular')->nullable();
                 $tabla->boolean('toma_anticonceptivos')->nullable();
 
-                $tabla->foreign('id_paciente')->references('id_paciente')->on('paciente')->onDelete('cascade');
+                $tabla->foreign('id')->references('id')->on('paciente')->onDelete('cascade');
             });
 
             Schema::create('historial_dientes', function (Blueprint $tabla) {
+				$tabla->increments('id');
                 $tabla->integer('id_paciente')->unsigned();
                 $tabla->integer('diente');
                 $tabla->integer('seccion');
                 $tabla->text('observacion');
 
-                $tabla->foreign('id_paciente')->references('id_paciente')->on('paciente')->onDelete('cascade');
-                $tabla->primary(['id_paciente', 'diente', 'seccion']);
+				$tabla->unique(['id_paciente', 'diente', 'seccion']);
+                $tabla->foreign('id_paciente')->references('id')->on('paciente')->onDelete('cascade');
             });
 
             Schema::create('enfermedad', function (Blueprint $tabla) {
-                $tabla->increments('id_enfermedad');
+                $tabla->increments('id');
                 $tabla->string('nombre');
             });
 
@@ -130,13 +131,13 @@ class CreateDientesSchema extends Migration
                 $tabla->integer('id_paciente')->unsigned();
                 $tabla->text('detalles')->nullable();
 
-                $tabla->foreign('id_enfermedad')->references('id_enfermedad')->on('enfermedad')->onDelete('cascade');
-                $tabla->foreign('id_paciente')->references('id_paciente')->on('paciente')->onDelete('cascade');
+                $tabla->foreign('id_enfermedad')->references('id')->on('enfermedad')->onDelete('cascade');
+                $tabla->foreign('id_paciente')->references('id')->on('paciente')->onDelete('cascade');
                 $tabla->primary(['id_enfermedad', 'id_paciente']);
             });
 
             Schema::create('medicamento', function (Blueprint $tabla) {
-                $tabla->increments('id_medicamento');
+                $tabla->increments('id');
                 $tabla->string('nombre');
             });
             
@@ -145,13 +146,13 @@ class CreateDientesSchema extends Migration
                 $tabla->integer('id_paciente')->unsigned();
                 $tabla->text('detalles')->nullable();
 
-                $tabla->foreign('id_medicamento')->references('id_medicamento')->on('medicamento')->onDelete('cascade');
-                $tabla->foreign('id_paciente')->references('id_paciente')->on('paciente')->onDelete('cascade');
+                $tabla->foreign('id_medicamento')->references('id')->on('medicamento')->onDelete('cascade');
+                $tabla->foreign('id_paciente')->references('id')->on('paciente')->onDelete('cascade');
                 $tabla->primary(['id_medicamento', 'id_paciente']);
             });
             
             Schema::create('alergia', function (Blueprint $tabla) {
-                $tabla->increments('id_alergia');
+                $tabla->increments('id');
                 $tabla->string('nombre');
             });
 
@@ -160,8 +161,8 @@ class CreateDientesSchema extends Migration
                 $tabla->integer('id_paciente')->unsigned();
                 $tabla->text('detalles')->nullable();
 
-                $tabla->foreign('id_alergia')->references('id_alergia')->on('alergia')->onDelete('cascade');
-                $tabla->foreign('id_paciente')->references('id_paciente')->on('paciente')->onDelete('cascade');
+                $tabla->foreign('id_alergia')->references('id')->on('alergia')->onDelete('cascade');
+                $tabla->foreign('id_paciente')->references('id')->on('paciente')->onDelete('cascade');
                 $tabla->primary(['id_alergia', 'id_paciente']);
             });
         });
