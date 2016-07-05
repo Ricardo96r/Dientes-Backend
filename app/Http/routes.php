@@ -40,6 +40,8 @@ Route::group(['middleware' => ['api'], 'prefix' => 'api/v1', 'namespace'], funct
 	Route::get('consulta/{id_consulta}', 'ConsultaController@detallesConsulta');
 	Route::get('consultasPaciente/{id_paciente}', 'ConsultaController@consultasPaciente');
 	Route::get('consulta/odontologo/{id_odontologo}/paciente/{id_paciente}', 'ConsultaController@consultasOdontologoPaciente');
+	Route::get('pacientesMes/{mes}', 'ConsultaController@pacientesMes');
+	Route::get('ingresosMes/{mes}', 'ConsultaController@ingresosMes');
 	Route::post('registrarConsulta', 'ConsultaController@registrarConsulta');
 	
 	//OdontologoController
@@ -73,8 +75,6 @@ Route::group(['middleware' => ['api'], 'prefix' => 'api/v1', 'namespace'], funct
 	//MedicamentoController
 	Route::get('medicamentos','MedicamentoController@medicamentos');
 
-	Route::get('pacientesMes/{mes}', 'ViejoController@pacientesMes');
-	Route::get('ingresosMes/{mes}', 'ViejoController@ingresosMes');
 });
 
 
