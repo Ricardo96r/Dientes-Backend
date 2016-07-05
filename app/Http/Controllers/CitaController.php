@@ -38,6 +38,17 @@ class CitaController extends Controller
         return $resultado;
 	}
 	
+	public function citasPaciente($id_paciente) {
+		$resultado=cita::select(DB::raw("CONCAT(paciente.nombre,' ', paciente.apellido) AS paciente, cita.motivo, cita.fecha"))
+		->join('paciente', 'cita.id_paciente', '=', 'paciente.id')
+		->where('id_paciente','=', $id_paciente)
+		->whereraw("DATEPART(year,cita.fecha)=DATEPART(year,GETDATE())")
+		->whereraw("((DATEPART(mm,cita.fecha)=DATEPART(mm,GETDATE())
+		AND DATEPART(dd,cita.fecha)>DATEPART(dd,GETDATE()))OR DATEPART(mm,cita.fecha)>DATEPART(mm,GETDATE()))")
+		->get();
+        return $resultado;
+	}
+	
 	public function citasDia() {
 		$resultado=cita::select(DB::raw("CONCAT(odontologo.nombre,' ', odontologo.apellido) AS odontologo,
 		CONCAT(paciente.nombre,' ', paciente.apellido) AS paciente, cita.motivo,

@@ -28,6 +28,7 @@ Route::group(['middleware' => ['api'], 'prefix' => 'api/v1', 'namespace'], funct
 	Route::get('paciente/{id_paciente}', 'PacienteController@datosPaciente');
 	Route::get('pacientes', 'PacienteController@pacientes');
 	Route::get('odontologos/{id_odontologo}', 'PacienteController@pacientesOdontologo');
+	Route::post('registrarPaciente', 'PacienteController@registrarPaciente');
 	
 	//HistorialController
 	Route::get('alergias/{id_paciente}', 'HistorialController@alergiasPaciente');
@@ -44,6 +45,7 @@ Route::group(['middleware' => ['api'], 'prefix' => 'api/v1', 'namespace'], funct
 	//OdontologoController
 	Route::get('odontologos', 'OdontologoController@odontologos');
 	Route::get('detalleOdontologo/{id_odontologo}', 'OdontologoController@detallesOdontologo');
+	Route::post('registrarOdontologo', 'odontologoController@registrarOdontologo');
 	
 	//TratamientoController
 	Route::get('tratamientos', 'TratamientoController@tratamientos');
@@ -52,9 +54,11 @@ Route::group(['middleware' => ['api'], 'prefix' => 'api/v1', 'namespace'], funct
 	//FacturaController
 	Route::get('facturas', 'FacturaController@facturas');
 	Route::get('facturas/{id_consulta}', 'FacturaController@factura');
+	Route::post('facturar', 'FacturaController@facturar');
 	
 	//CitaController
 	Route::get('citas/{id_odontologo}', 'CitaController@citasOdontologo');
+	Route::get('citasPaciente/{id_paciente}', 'CitaController@citasPaciente');
 	Route::get('citasDia', 'CitaController@citasDia');
 	Route::get('citasMes', 'CitaController@citasMes');
 	Route::get('detallesCita/{id_cita}','CitaController@cita');
@@ -68,21 +72,9 @@ Route::group(['middleware' => ['api'], 'prefix' => 'api/v1', 'namespace'], funct
 	
 	//MedicamentoController
 	Route::get('medicamentos','MedicamentoController@medicamentos');
-	
-	
-	
+
 	Route::get('pacientesMes/{mes}', 'ViejoController@pacientesMes');
 	Route::get('ingresosMes/{mes}', 'ViejoController@ingresosMes');
-
-	
-
-	
-	
-	Route::post('facturar', 'ViejoController@facturar');
-	Route::post('registrarPaciente', 'ViejoController@registrarPaciente');
-	Route::post('registrarOdontologo', 'ViejoController@registrarOdontologo');
-	
-	
 });
 
 

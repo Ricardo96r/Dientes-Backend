@@ -76,4 +76,46 @@ class ConsultaController extends Controller
 			return response()->json(['resultado' => 'exito']);
 		}
 	}
+	
+	public function pacientesMes($mes) {
+        return DB::select("
+            SELECT b.id_odontologo, CONCAT(b.nombre,' ', b.segundo_nombre,' ', b.apellido,' ', b.segundo_apellido) AS nombre, b.cedula, b.especialidad, q.clientes 
+            FROM(
+                SELECT id_odontologo, COUNT(DISTINCT id_paciente) AS clientes
+                FROM consulta
+                GROUP BY id_odontologo, DATEPART(YEAR,fecha), DATEPART(month,fecha)
+                HAVING COUNT(DISTINCT id_paciente)=(
+                    SELECT MAX(clientes) 
+                    FROM(
+                        SELECT id_odontologo AS id, DATEPART(MONTH,fecha) AS mes, COUNT(DISTINCT id_paciente) AS clientes
+                        FROM consulta
+                        GROUP BY id_odontologo, DATEPART(YEAR,fecha), DATEPART(month,fecha)
+                        HAVING DATEPART(YEAR,GETDATE())= DATEPART(YEAR,fecha) AND DATEPART(MONTH,fecha)='$mes'
+                    ) AS query1
+                )
+            ) AS q INNER JOIN odontologo b ON q.id_odontologo=b.id_odontologo;
+        ");
+    }
+	
+	public function ingresosMes($mes) {
+        return DB::select("SELECT b.id_odontologo, CONCAT(b.nombre,' ', b.segundo_nombre,' ', b.apellido,' ',
+							b.segundo_apellido) AS nombre, b.cedula, b.especialidad, ROUND(q.ingresos, 1) AS ingresos
+							FROM(
+							SELECT a.id_odontologo, SUM(b.costo) AS ingresos
+							FROM consulta a INNER JOIN factura b ON a.id_consulta=b.id_consulta
+							GROUP BY a.id_odontologo, DATEPART(YEAR,a.fecha), DATEPART(month,a.fecha)
+							HAVING SUM(b.costo)=(
+							SELECT MAX(ingresos)
+							FROM(
+							SELECT a.id_odontologo AS id, DATEPART(MONTH,a.fecha) AS mes,
+							SUM(b.costo) AS ingresos
+							FROM consulta a INNER JOIN factura b ON a.id_consulta=b.id_consulta
+							GROUP BY a.id_odontologo, DATEPART(YEAR,a.fecha),
+							DATEPART(month,a.fecha)
+							HAVING DATEPART(YEAR,GETDATE())= DATEPART(YEAR,a.fecha) AND
+							DATEPART(MONTH,a.fecha)='$mes'
+							) AS query1
+							)
+							) AS q INNER JOIN odontologo b ON q.id_odontologo=b.id_odontologo;");
+    }
 }

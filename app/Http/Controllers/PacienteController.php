@@ -10,6 +10,8 @@ use App\paciente;
 
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Validator;
+
 class PacienteController extends Controller
 {
     public function clientesPorEdad()
@@ -49,5 +51,39 @@ class PacienteController extends Controller
 		return $resultado;
 	}
 
+	public function registrarPaciente(Request $request) {
+		 $v = Validator::make($request->all(), [
+        'nombre' => 'required|String',
+		'segundo_nombre' => 'String',
+		'apellido' => 'required|String',
+		'segundo_apellido' => 'String',
+		'genero' => 'required|String',
+		'fecha_nacimiento' => 'required|date',
+        'cedula' => 'required|Integer',
+		'ocupacion' => 'required|String',
+		'telefono' => 'required|min:11|numeric',
+		'telefono_emergencias' => 'required|min:11|numeric'
+		]);
 
+		if ($v->fails())
+		{
+			return $v->errors();
+		}
+		else{
+			$paciente = new paciente;
+			$paciente->nombre=$request->nombre;
+			$paciente->segundo_nombre=$request->segundo_nombre;
+			$paciente->apellido = $request->apellido;
+			$paciente->segundo_apellido = $request->segundo_apellido;
+			$paciente->genero=$request->genero;
+			$paciente->fecha_nacimiento=$request->fecha_nacimiento;
+			$paciente->cedula = $request->cedula;
+			$paciente->ocupacion = $request->ocupacion;
+			$paciente->telefono = $request->telefono;
+			$paciente->telefono_emergencias = $request->telefono_emergencias;
+			$paciente->save();
+			return response()->json(['resultado' => 'exito']);
+		}
+	}
+	
 }
