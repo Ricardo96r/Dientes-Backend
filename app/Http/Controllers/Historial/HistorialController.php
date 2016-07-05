@@ -75,14 +75,17 @@ class HistorialController extends Controller
 	
 	
 	public function datosPaciente($id_paciente) {
-        return DB::select("SELECT CONCAT(nombre,' ', segundo_nombre,' ', apellido,' ', segundo_apellido) AS nombre, fecha_nacimiento, cedula, ocupacion, telefono, telefono_emergencias
+        return DB::select("SELECT CONCAT(nombre,' ', segundo_nombre,' ', apellido,' ', segundo_apellido) AS nombre, fecha_nacimiento, cedula, ocupacion, telefono, telefono_emergencias, genero
 		FROM paciente
 		WHERE id_paciente='$id_paciente';");
 	}
 	
 	public function historialPaciente($id_paciente) {
 		//$resultado= DB::select("EXEC [dbo].[HistorialPaciente] @id_paciente='$id_paciente';");
-		$resultado= DB::select("SELECT * FROM historial WHERE id_paciente='$id_paciente';");
+		$resultado= DB::select("SELECT historial.*, CONCAT(paciente.nombre, ' ', paciente.apellido) as nombre FROM historial 
+		INNER JOIN paciente
+		on paciente.id_paciente = historial.id_paciente
+		WHERE historial.id_paciente='$id_paciente';");
         return $resultado;
 	}
 	
@@ -179,7 +182,7 @@ class HistorialController extends Controller
 		ORDER BY nombre;");
         return $resultado;
 	}
-	
+
 	public function tratamientos() {
 		$resultado= DB::select("SELECT id_tratamiento, nombre FROM tratamiento;");
         return $resultado;
@@ -228,14 +231,30 @@ class HistorialController extends Controller
 	}
 	
 	public function consultasPaciente($id_paciente){
-		$resultado=DB::select("SELECT a.*, c.* 
+		$resultado=DB::select("SELECT a.*, c.*, CONCAT(d.nombre,' ',d.apellido) as odontologo
 		FROM consulta a 
 		LEFT JOIN consulta_has_tratamiento b 
 		ON a.id_consulta=b.id_consulta 
 		LEFT JOIN tratamiento c 
 		ON c.id_tratamiento=b.id_tratamiento
+		LEFT JOIN odontologo d
+		ON d.id_odontologo=a.id_odontologo
 		WHERE a.id_paciente='$id_paciente'");
 		return $resultado;
+	}
+	
+	public function consultasOdontologoPaciente($id_odontologo, $id_paciente) {
+		return DB::select("
+			SELECT a.*, c.*, CONCAT(d.nombre,' ',d.apellido) as odontologo
+			FROM consulta a 
+			LEFT JOIN consulta_has_tratamiento b 
+			ON a.id_consulta=b.id_consulta 
+			LEFT JOIN tratamiento c 
+			ON c.id_tratamiento=b.id_tratamiento
+			LEFT JOIN odontologo d
+			ON d.id_odontologo=a.id_odontologo
+			WHERE a.id_paciente='$id_paciente' AND a.id_odontologo='$id_odontologo'
+		");
 	}
 	
 	public function facturas(){
@@ -315,6 +334,16 @@ class HistorialController extends Controller
 			return "Éxito";
 		}
 	}
-	
+
+	public function pacientesOdontologo($id_odontologo) {
+		$resultado= DB::select("SELECT paciente.id_paciente, CONCAT(nombre, ' ', apellido) AS nombre 
+		FROM paciente
+		INNER JOIN cita ON cita.id_paciente=paciente.id_paciente
+		WHERE cita.id_odontologo='$id_odontologo'
+		ORDER BY nombre;");
+		return $resultado;
+	}
+
+
 
 }

@@ -39,6 +39,7 @@ Route::group(['middleware' => ['api'], 'prefix' => 'api/v1', 'namespace' => 'His
 	Route::get('pacientes', 'HistorialController@pacientes');
 	Route::get('tratamientos', 'HistorialController@tratamientos');
 	Route::get('consultasPaciente/{id_paciente}', 'HistorialController@consultasPaciente');
+	Route::get('consulta/odontologo/{id_odontologo}/paciente/{id_paciente}', 'HistorialController@consultasOdontologoPaciente');
 	Route::get('facturas/', 'HistorialController@facturas');
 	Route::get('facturas/{id_consulta}', 'HistorialController@factura');
 	Route::post('registrarCita', 'HistorialController@registrarCita');
@@ -46,6 +47,7 @@ Route::group(['middleware' => ['api'], 'prefix' => 'api/v1', 'namespace' => 'His
 	Route::post('facturar', 'HistorialController@facturar');
 	Route::post('registrarPaciente', 'HistorialController@registrarPaciente');
 	Route::post('registrarOdontologo', 'HistorialController@registrarOdontologo');
+	Route::get('odontologos/{id_odontologo}', 'HistorialController@pacientesOdontologo');
 });
 
 
