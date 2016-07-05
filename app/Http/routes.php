@@ -20,34 +20,35 @@ Route::group(['middleware' => 'web'], function () {
     });
 });
 
-Route::group(['middleware' => ['api'], 'prefix' => 'api/v1', 'namespace' => 'Historial'], function () {
-    Route::get('clientesPorEdad', 'HistorialController@clientesPorEdad');
-	Route::get('pacientesMes/{mes}', 'HistorialController@pacientesMes');
-	Route::get('ingresosMes/{mes}', 'HistorialController@ingresosMes');
-	Route::get('tratamientoMes/{mes}/{odontologo}', 'HistorialController@tratamientoMes');
-	Route::get('paciente/{id_paciente}', 'HistorialController@datosPaciente');
-	Route::get('historial/{id_paciente}', 'HistorialController@historialPaciente');
-	Route::get('alergias/{id_paciente}', 'HistorialController@alergiasPaciente');
-	Route::get('enfermedades/{id_paciente}', 'HistorialController@enfermedadesPaciente');
-	Route::get('medicamentos/{id_paciente}', 'HistorialController@medicamentosPaciente');
-	Route::get('dientes/{id_paciente}', 'HistorialController@dientesPaciente');
-	Route::get('citas/{id_odontologo}', 'HistorialController@citasOdontologo');
-	Route::get('citasDia', 'HistorialController@citasDia');
-	Route::get('citasSemana', 'HistorialController@citasSemana');
-	Route::get('citasMes', 'HistorialController@citasMes');
-	Route::get('odontologos', 'HistorialController@odontologos');
-	Route::get('pacientes', 'HistorialController@pacientes');
-	Route::get('tratamientos', 'HistorialController@tratamientos');
-	Route::get('consultasPaciente/{id_paciente}', 'HistorialController@consultasPaciente');
-	Route::get('consulta/odontologo/{id_odontologo}/paciente/{id_paciente}', 'HistorialController@consultasOdontologoPaciente');
-	Route::get('facturas/', 'HistorialController@facturas');
-	Route::get('facturas/{id_consulta}', 'HistorialController@factura');
-	Route::post('registrarCita', 'HistorialController@registrarCita');
-	Route::post('registrarConsulta', 'HistorialController@registrarConsulta');
-	Route::post('facturar', 'HistorialController@facturar');
-	Route::post('registrarPaciente', 'HistorialController@registrarPaciente');
-	Route::post('registrarOdontologo', 'HistorialController@registrarOdontologo');
-	Route::get('odontologos/{id_odontologo}', 'HistorialController@pacientesOdontologo');
+Route::group(['middleware' => ['api'], 'prefix' => 'api/v1', 'namespace'], function () {
+    Route::get('clientesPorEdad', 'PacienteController@clientesPorEdad');
+	Route::get('pacientesMes/{mes}', 'ViejoController@pacientesMes');
+	Route::get('ingresosMes/{mes}', 'ViejoController@ingresosMes');
+	Route::get('tratamientoMes/{mes}/{odontologo}', 'ViejoController@tratamientoMes');
+	Route::get('paciente/{id_paciente}', 'ViejoController@datosPaciente');
+	Route::get('historial/{id_paciente}', 'ViejoController@historialPaciente');
+	Route::get('alergias/{id_paciente}', 'ViejoController@alergiasPaciente');
+	Route::get('enfermedades/{id_paciente}', 'ViejoController@enfermedadesPaciente');
+	Route::get('medicamentos/{id_paciente}', 'ViejoController@medicamentosPaciente');
+	Route::get('dientes/{id_paciente}', 'ViejoController@dientesPaciente');
+	Route::get('citas/{id_odontologo}', 'ViejoController@citasOdontologo');
+	Route::get('citasDia', 'ViejoController@citasDia');
+	Route::get('citasSemana', 'ViejoController@citasSemana');
+	Route::get('citasMes', 'ViejoController@citasMes');
+	Route::get('odontologos', 'ViejoController@odontologos');
+	Route::get('pacientes', 'ViejoController@pacientes');
+	Route::get('tratamientos', 'ViejoController@tratamientos');
+	Route::get('consultasPaciente/{id_paciente}', 'ViejoController@consultasPaciente');
+	Route::get('consulta/odontologo/{id_odontologo}/paciente/{id_paciente}', 'ViejoController@consultasOdontologoPaciente');
+	Route::get('facturas/', 'ViejoController@facturas');
+	Route::get('facturas/{id_consulta}', 'ViejoController@factura');
+	Route::post('registrarCita', 'ViejoController@registrarCita');
+	Route::post('registrarConsulta', 'ViejoController@registrarConsulta');
+	Route::post('facturar', 'ViejoController@facturar');
+	Route::post('registrarPaciente', 'ViejoController@registrarPaciente');
+	Route::post('registrarOdontologo', 'ViejoController@registrarOdontologo');
+	Route::get('odontologos/{id_odontologo}', 'ViejoController@pacientesOdontologo');
+	Route::get('detalleOdontologo/{id_odontologo}', 'ViejoController@detallesOdontologo');
 });
 
 

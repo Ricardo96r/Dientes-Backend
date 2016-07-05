@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Historial;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Query;
@@ -10,16 +10,8 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class HistorialController extends Controller
+class ViejoController extends Controller
 {
-	 public function clientesPorEdad()
-    {
-        return DB::select("
-            SELECT (DATEPART(year,getDate())-DATEPART(year,paciente.fecha_nacimiento)) AS edad, COUNT(*) AS clientes 
-            FROM paciente 
-            GROUP BY (DATEPART(year,getDate())-DATEPART(year,paciente.fecha_nacimiento));
-        ");
-    }
 	
     public function pacientesMes($mes) {
         return DB::select("
@@ -344,6 +336,11 @@ class HistorialController extends Controller
 		return $resultado;
 	}
 
-
+	public function detallesOdontologo($id_odontologo){
+		$resultado= DB::select("SELECT id_odontologo, CONCAT(nombre, ' ', apellido) AS nombre, cedula, especialidad 
+		FROM odontologo
+		WHERE id_odontologo='$id_odontologo'");
+        return $resultado;
+	}
 
 }

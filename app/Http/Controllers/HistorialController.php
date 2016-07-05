@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-class Historial_HistorialController extends Controller
+class HistorialController extends Controller
 {
     //
 }
