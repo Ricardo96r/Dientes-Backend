@@ -78,9 +78,8 @@ class ConsultaController extends Controller
 	}
 	
 	public function pacientesMes($mes) {
-        return DB::select("
-            SELECT b.id_odontologo, CONCAT(b.nombre,' ', b.segundo_nombre,' ', b.apellido,' ', b.segundo_apellido) AS nombre, b.cedula, b.especialidad, q.clientes 
-            FROM(
+        $resultado=consulta::select(DB::raw("odontologo.id, CONCAT(odontologo.nombre,' ', odontologo.segundo_nombre,' ', odontologo.apellido,' ', odontologo.segundo_apellido) AS nombre, odontologo.cedula, odontologo.especialidad, q.clientes "))
+		->from(DB::raw("(
                 SELECT id_odontologo, COUNT(DISTINCT id_paciente) AS clientes
                 FROM consulta
                 GROUP BY id_odontologo, DATEPART(YEAR,fecha), DATEPART(month,fecha)
@@ -90,32 +89,40 @@ class ConsultaController extends Controller
                         SELECT id_odontologo AS id, DATEPART(MONTH,fecha) AS mes, COUNT(DISTINCT id_paciente) AS clientes
                         FROM consulta
                         GROUP BY id_odontologo, DATEPART(YEAR,fecha), DATEPART(month,fecha)
-                        HAVING DATEPART(YEAR,GETDATE())= DATEPART(YEAR,fecha) AND DATEPART(MONTH,fecha)='$mes'
+                        HAVING DATEPART(YEAR,GETDATE())= DATEPART(YEAR,fecha) AND DATEPART(MONTH,fecha)=7
                     ) AS query1
                 )
-            ) AS q INNER JOIN odontologo b ON q.id_odontologo=b.id_odontologo;
-        ");
+            ) AS q"))
+		->join('odontologo', 'odontologo.id', '=', 'id_odontologo')
+		->get();
+		
+		return $resultado;
     }
 	
 	public function ingresosMes($mes) {
-        return DB::select("SELECT b.id_odontologo, CONCAT(b.nombre,' ', b.segundo_nombre,' ', b.apellido,' ',
-							b.segundo_apellido) AS nombre, b.cedula, b.especialidad, ROUND(q.ingresos, 1) AS ingresos
-							FROM(
-							SELECT a.id_odontologo, SUM(b.costo) AS ingresos
-							FROM consulta a INNER JOIN factura b ON a.id_consulta=b.id_consulta
-							GROUP BY a.id_odontologo, DATEPART(YEAR,a.fecha), DATEPART(month,a.fecha)
-							HAVING SUM(b.costo)=(
-							SELECT MAX(ingresos)
-							FROM(
-							SELECT a.id_odontologo AS id, DATEPART(MONTH,a.fecha) AS mes,
-							SUM(b.costo) AS ingresos
-							FROM consulta a INNER JOIN factura b ON a.id_consulta=b.id_consulta
-							GROUP BY a.id_odontologo, DATEPART(YEAR,a.fecha),
-							DATEPART(month,a.fecha)
-							HAVING DATEPART(YEAR,GETDATE())= DATEPART(YEAR,a.fecha) AND
-							DATEPART(MONTH,a.fecha)='$mes'
-							) AS query1
-							)
-							) AS q INNER JOIN odontologo b ON q.id_odontologo=b.id_odontologo;");
+		$resultado=consulta::select(DB::raw("odontologo.id, CONCAT(odontologo.nombre,' ', odontologo.segundo_nombre,' ', odontologo.apellido,' ',
+		odontologo.segundo_apellido) AS nombre, odontologo.cedula, odontologo.especialidad, ROUND(q.ingresos, 1) AS ingresos"))
+		->from(DB::raw("(
+						SELECT a.id_odontologo, ROUND(SUM(b.costo),0) AS ingresos
+						FROM consulta a INNER JOIN factura b ON a.id=b.id
+						GROUP BY a.id_odontologo, DATEPART(YEAR,a.fecha), DATEPART(month,a.fecha)
+						HAVING ROUND(SUM(b.costo),0)=ROUND((
+						SELECT MAX(ingresos)
+						FROM(
+						SELECT a.id_odontologo AS id, DATEPART(MONTH,a.fecha) AS mes,
+						SUM(b.costo) AS ingresos
+						FROM consulta a INNER JOIN factura b ON a.id=b.id
+						GROUP BY a.id_odontologo, DATEPART(YEAR,a.fecha),
+						DATEPART(month,a.fecha)
+						HAVING DATEPART(YEAR,GETDATE())= DATEPART(YEAR,a.fecha) AND
+						DATEPART(MONTH,a.fecha)='$mes'
+						) AS query1
+						),0)
+						) AS q"))
+		->join('odontologo', 'odontologo.id', '=', 'id_odontologo')
+		->get();
+		
+		return $resultado;
+     
     }
 }
