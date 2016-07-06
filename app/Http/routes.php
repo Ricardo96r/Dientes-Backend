@@ -35,6 +35,7 @@ Route::group(['middleware' => ['api'], 'prefix' => 'api/v1', 'namespace'], funct
 	Route::get('enfermedades/{id_paciente}', 'HistorialController@enfermedadesPaciente');
 	Route::get('medicamentos/{id_paciente}', 'HistorialController@medicamentosPaciente');
 	Route::get('dientes/{id_paciente}', 'HistorialController@dientesPaciente');
+	Route::post('registrarHistorial', 'HistorialController@registrarHistorial');
 	
 	//ConsultaController
 	Route::get('consulta/{id_consulta}', 'ConsultaController@detallesConsulta');
@@ -68,12 +69,18 @@ Route::group(['middleware' => ['api'], 'prefix' => 'api/v1', 'namespace'], funct
 	
 	//AlergiaController
 	Route::get('alergias','AlergiaController@alergias');
+	Route::post('nuevaAlergia','AlergiaController@nuevaAlergia');
 	
 	//EnfermedadController
 	Route::get('enfermedades','EnfermedadController@enfermedades');
+	Route::post('nuevaEnfermedad','EnfermedadController@nuevaEnfermedad');
 	
 	//MedicamentoController
 	Route::get('medicamentos','MedicamentoController@medicamentos');
+	Route::post('nuevoMedicamento','MedicamentoController@nuevoMedicamento');
+	
+	//DienteController
+	Route::post('diente','DienteController@nuevoDiente');
 
 });
 
