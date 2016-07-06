@@ -2,7 +2,7 @@
 - Se uso laravel framework 5.2
 - Funciona como API
 - Instalacion fácil usando la guia de lavarel
-- usar "php artisan migrate:refresh -seed" para crear las tablas de la db y sus datos (seed)
+- usar "php artisan migrate:refresh --seed" para crear las tablas de la db y sus datos (seed)
 - Esta parte del proyecto esta relacionado con su frontend: https://github.com/Ricardo96r/Dientes-Frontend
 
 # Laravel PHP Framework
