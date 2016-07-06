@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Validator;
 
 class MedicamentoController extends Controller
 {
-    public function Medicamentos(){
-		$resultado = medicamento::all();
+    public function medicamentos(){
+		$resultado = medicamento::select('medicamento.nombre','medicamento.id')
+		->orderBy('medicamento.nombre')
+		->get();
 		return $resultado;
 	}
 	

@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Validator;
 class AlergiaController extends Controller
 {
     public function alergias(){
-		$resultado = alergia::all();
+		$resultado = alergia::select('alergia.nombre','alergia.id')
+		->orderBy('alergia.nombre')
+		->get();
 		return $resultado;
 	}
 	

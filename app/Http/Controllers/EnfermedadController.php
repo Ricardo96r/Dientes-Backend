@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Validator;
 class EnfermedadController extends Controller
 {
     public function enfermedades(){
-		$resultado = enfermedad::all();
+		$resultado = enfermedad::select('enfermedad.nombre','enfermedad.id')
+		->orderBy('enfermedad.nombre')
+		->get();
 		return $resultado;
 	}
 	
