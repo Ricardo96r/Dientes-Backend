@@ -38,4 +38,22 @@ class MedicamentoController extends Controller
 			return response()->json(['resultado' => 'exito']);
 		}
 	}
+	
+	public function anexarMedicamento(Request $request) {
+		 $v = Validator::make($request->all(), [
+		 
+        'id_medicamento' => 'required|exists:Medicamento,id',
+		'id_paciente' => 'required|exists:Historial,id',
+		]);
+
+		if ($v->fails())
+		{
+			return $v->errors();
+		}
+		else{
+			$medicamento = medicamento::find($request->id_medicamento);
+			$medicamento->historial()->attach($request->id_paciente);
+			return response()->json(['resultado' => 'exito']);
+		}
+	}
 }

@@ -82,7 +82,7 @@ class PacienteController extends Controller
 			$paciente->telefono = $request->telefono;
 			$paciente->telefono_emergencias = $request->telefono_emergencias;
 			$paciente->save();
-			return response()->json(['resultado' => 'exito']);
+			return response()->json(['resultado' => 'exito', 'id_paciente'=> $paciente->id]);
 		}
 	}
 	

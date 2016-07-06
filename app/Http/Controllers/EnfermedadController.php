@@ -39,5 +39,23 @@ class EnfermedadController extends Controller
 		}
 	}
 	
+	public function anexarEnfermedad(Request $request) {
+		 $v = Validator::make($request->all(), [
+		 
+        'id_enfermedad' => 'required|exists:Enfermedad,id',
+		'id_paciente' => 'required|exists:Historial,id',
+		]);
+
+		if ($v->fails())
+		{
+			return $v->errors();
+		}
+		else{
+			$enfermedad = enfermedad::find($request->id_enfermedad);
+			$enfermedad->historial()->attach($request->id_paciente);
+			return response()->json(['resultado' => 'exito']);
+		}
+	}
+	
 	
 }

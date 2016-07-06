@@ -70,14 +70,17 @@ Route::group(['middleware' => ['api'], 'prefix' => 'api/v1', 'namespace'], funct
 	//AlergiaController
 	Route::get('alergias','AlergiaController@alergias');
 	Route::post('nuevaAlergia','AlergiaController@nuevaAlergia');
+	Route::post('anexarAlergia','AlergiaController@anexarAlergia');
 	
 	//EnfermedadController
 	Route::get('enfermedades','EnfermedadController@enfermedades');
 	Route::post('nuevaEnfermedad','EnfermedadController@nuevaEnfermedad');
+	Route::post('anexarEnfermedad','enfermedadController@anexarEnfermedad');
 	
 	//MedicamentoController
 	Route::get('medicamentos','MedicamentoController@medicamentos');
 	Route::post('nuevoMedicamento','MedicamentoController@nuevoMedicamento');
+	Route::post('anexarMedicamento','MedicamentoController@anexarMedicamento');
 	
 	//DienteController
 	Route::post('diente','DienteController@nuevoDiente');
