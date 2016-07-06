@@ -20,11 +20,14 @@ class ConsultaController extends Controller
 		$resultado=consulta::leftJoin('consulta_has_tratamiento', 'consulta.id', '=', 'consulta_has_tratamiento.id_consulta')
 		->leftJoin('tratamiento', 'consulta_has_tratamiento.id_tratamiento', '=', 'tratamiento.id')
         ->join('odontologo', 'consulta.id_odontologo', '=', 'odontologo.id')
+		->leftJoin('factura', 'factura.id', '=', 'consulta.id')
 		->where('consulta.id', '=', $id_consulta)
-        ->select(DB::raw("consulta.id, consulta.observaciones, consulta.fecha, tratamiento.nombre as tratamiento, tratamiento.detalles as detalles_tratamiento, CONCAT(odontologo.nombre,' ',odontologo.apellido) as odontologo"))
+        ->select(DB::raw("consulta.id, consulta.observaciones, consulta.fecha, tratamiento.nombre as tratamiento, tratamiento.detalles as detalles_tratamiento, CONCAT(odontologo.nombre,' ',odontologo.apellido) as odontologo, factura.fecha as factura_fecha, factura.costo as costo_factura, factura.forma_de_pago"))
         ->get();
 		return $resultado;
 	}
+	
+	
 	
    public function consultasPaciente($id_paciente){
 		$resultado=consulta::leftJoin('consulta_has_tratamiento', 'consulta.id', '=', 'consulta_has_tratamiento.id_consulta')
@@ -38,7 +41,7 @@ class ConsultaController extends Controller
 	}
 	
 	public function consultasOdontologoPaciente($id_odontologo, $id_paciente) {
-		$resultado=consulta::select(DB::raw("consulta.*, tratamiento.*, CONCAT(odontologo.nombre,' ',odontologo.apellido) as odontologo"))
+		$resultado=consulta::select(DB::raw("tratamiento.*,consulta.*, CONCAT(odontologo.nombre,' ',odontologo.apellido) as odontologo"))
 		->leftJoin('consulta_has_tratamiento', 'consulta_has_tratamiento.id_consulta', '=', 'consulta.id')
 		->leftJoin('tratamiento', 'consulta_has_tratamiento.id_tratamiento', '=', 'tratamiento.id')
 		->leftJoin('odontologo','odontologo.id','=', 'consulta.id_odontologo')
